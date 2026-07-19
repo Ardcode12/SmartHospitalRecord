@@ -16,26 +16,18 @@ async def get_current_user(
 ) -> dict:
     token = credentials.credentials
     try:
-        # Supabase JWTs are signed with the jwt_secret (HS256)
-        payload = jwt.decode(
-            token,
-            settings.jwt_secret,
-            algorithms=["HS256"],
-            options={"verify_aud": False},
-        )
-    except JWTError as exc:
+        # Supabase API handles the signature verification (supports ES256/RS256/HS256 automatically)
+        user_response = supabase_admin.auth.get_user(jwt=token)
+        if not user_response or not user_response.user:
+            raise ValueError("No user returned")
+        user_id = str(user_response.user.id)
+    except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Invalid or expired token: {exc}",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user_id: Optional[str] = payload.get("sub")
-    if not user_id:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token payload missing subject",
-        )
 
     # Fetch profile for role info
     result = (

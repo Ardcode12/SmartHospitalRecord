@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers import (
@@ -17,6 +19,14 @@ app = FastAPI(
     version="1.0.0",
 )
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    print("\n--- 422 VALIDATION ERROR ---")
+    print(f"URL: {request.url}")
+    print(f"Errors: {exc.errors()}")
+    print("----------------------------\n")
+    return JSONResponse(status_code=422, content={"detail": exc.errors()})
+
 # ---------------------------------------------------------------------------
 # CORS
 # ---------------------------------------------------------------------------
@@ -27,6 +37,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ---------------------------------------------------------------------------
+# Auto-create tables on startup via SQLAlchemy
+# ---------------------------------------------------------------------------
+
+@app.on_event("startup")
+async def create_tables():
+    from database import engine
+    from models.db_models import Base  # noqa: F401 — imports register all models
+
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables verified / created successfully.")
+    except Exception as exc:
+        print(f"⚠️  Table creation skipped or failed: {exc}")
 
 # ---------------------------------------------------------------------------
 # Routers

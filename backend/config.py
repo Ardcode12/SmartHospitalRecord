@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     supabase_anon_key: str
     supabase_service_key: str
     jwt_secret: str
+    database_url: str  # PostgreSQL direct connection for SQLAlchemy
 
     class Config:
         env_file = ".env"
