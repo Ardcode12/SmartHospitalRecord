@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Activity, User, Mail, Lock, Eye, EyeOff, Loader2, Hospital, Stethoscope, Users } from 'lucide-react';
+import { Activity, Lock, Eye, EyeOff, Loader2, Hospital, Stethoscope, Users } from 'lucide-react';
 import { register } from '../api/authApi';
 import { getMe } from '../api/authApi';
 import { getMyHospital } from '../api/hospitalApi';

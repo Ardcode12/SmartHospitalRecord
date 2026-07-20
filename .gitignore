@@ -1,0 +1,41 @@
+# ============================================================
+# Smart Hospital Records — Project-wide .gitignore
+# ============================================================
+
+# ── Environment / secrets ───────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Python backend ──────────────────────────────────────────
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/htmlcov/
+backend/.coverage
+backend/dist/
+backend/*.egg-info/
+backend/test_auth.py
+
+# ── Node / React frontend ───────────────────────────────────
+frontend/node_modules/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage/
+
+# ── Editors / OS ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Misc ────────────────────────────────────────────────────
+*.log
+*.tmp
