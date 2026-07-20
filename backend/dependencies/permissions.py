@@ -4,7 +4,7 @@ from typing import List
 from fastapi import Depends, HTTPException, status
 from dependencies.auth import get_current_user
 
-
+#hi da imthiyas
 def require_role(*roles: str):
     """
     FastAPI dependency factory — enforces that the current user has one of
